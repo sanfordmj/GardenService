@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  GardenService:
+    image: gardenservicewebapi
+    build:
+      context: .
+      dockerfile: ../GardenService/Dockerfile
+    links:
+      - sqlserverService
+
+  sqlserverService:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    hostname: 'Telemetry'
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "BigPassw0rd"
+    volumes:
+      - ./data/mssql:/var/opt/mssql3
+    ports:
+      - '1433:1433'
+    expose:
+      - 1433
