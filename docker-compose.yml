@@ -6,10 +6,12 @@ services:
     build:
       context: .
       dockerfile: ../GardenService/Dockerfile
+    ports:
+      - "8000:80"
     links:
-      - sqlserverService
+      - Telemetry
 
-  sqlserverService:
+  Telemetry:
     image: mcr.microsoft.com/mssql/server:2019-latest
     hostname: 'Telemetry'
     environment:
