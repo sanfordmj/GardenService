@@ -10,7 +10,7 @@ namespace GardenService
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Sensor> Sensors { get; set; } = null!;
         public DbSet<SensorType> SensorTypes { get; set; } = null!;
-        public DbSet<Moisture> Moistures { get; set; } = null!;
+        public DbSet<SensorReading> SensorReadings { get; set; } = null!;
         public DbSet<Error> Errors { get; set; } = null!;
         public DbSet<Trace> Traces { get; set; } = null!;
         public string? DbPath { get; private set; }
@@ -19,6 +19,7 @@ namespace GardenService
             : base(options)
         {
             this.Database.EnsureCreated();
+            //Overridden db path for imbeded. ie. sqlite
             //var folder = Environment.SpecialFolder.LocalApplicationData;
             //var path = Environment.GetFolderPath(folder);
             //DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}Telemetry.db";
@@ -29,16 +30,20 @@ namespace GardenService
         //protected override void OnConfiguring(DbContextOptionsBuilder options)
             //=> options.UseSqlite($"Data Source={DbPath}");
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder options)
+           // => options.UseLazyLoadingProxies();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasKey(o => new { o.IX_User }).HasMany(b => b.Moistures);
+            
+            modelBuilder.Entity<User>().HasKey(o => new { o.IX_User });
 
             modelBuilder.Entity<SensorType>().HasKey(o => new { o.IX_SensorType });
-
+            
             modelBuilder.Entity<Sensor>().HasKey(o => new { o.IX_Sensor });
 
-            modelBuilder.Entity<Moisture>().HasKey(o => new { o.IX_Moisture });  
-
+            modelBuilder.Entity<SensorReading>().HasKey(o => new { o.IX_SensorReading });  
+            
             modelBuilder.Entity<Error>().HasKey(o => new { o.IX_Error });
 
             modelBuilder.Entity<Trace>().HasKey(o => new { o.IX_Trace });
@@ -52,12 +57,12 @@ namespace GardenService
                 new SensorType { IX_SensorType = 1, Name = "Unit Test", Description = "Unit Test", DataType = "float", EnteredDate = DateTime.Now }
             );
             modelBuilder.Entity<Sensor>().HasData(
-                new Sensor { IX_Sensor = 1, IX_SensorType = 1, Name = "Unit Test", EnteredDate = DateTime.Now }
+                new Sensor { IX_Sensor = 1, IX_SensorType = 1, IX_User = 1, Name = "Unit Test", EnteredDate = DateTime.Now }
             );
-            modelBuilder.Entity<Moisture>().HasData(
-                new Moisture { IX_Moisture = 1, IX_User = 1, Value = 1.4f, EnteredDate = DateTime.Now },
-                new Moisture { IX_Moisture = 2, IX_User = 1, Value = 1.5f, EnteredDate = DateTime.Now },
-                new Moisture { IX_Moisture = 3, IX_User = 1, Value = 1.6f, EnteredDate = DateTime.Now }
+            modelBuilder.Entity<SensorReading>().HasData(
+                new SensorReading { IX_SensorReading = 1, IX_Sensor = 1, Value = 1.4f, EnteredDate = DateTime.Now },
+                new SensorReading { IX_SensorReading = 2, IX_Sensor = 1, Value = 1.5f, EnteredDate = DateTime.Now },
+                new SensorReading { IX_SensorReading = 3, IX_Sensor = 1, Value = 1.6f, EnteredDate = DateTime.Now }
             );
             modelBuilder.Entity<Error>().HasData(
                 new Error {IX_Error = 1, Level = "Unit Test", Logger = "Unit Test", Message = "Unit Test", StackTrace = "Unit Test", CreateDate = DateTime.Now},
