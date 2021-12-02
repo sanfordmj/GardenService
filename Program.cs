@@ -45,7 +45,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
+/*
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -61,7 +61,7 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "Database Creation/Migrations failed!");
     }
 }
-
+*/
 
 
 app.UseHttpsRedirection();
