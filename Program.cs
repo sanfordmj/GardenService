@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Text.Json;
 using NLog;
 using NLog.Web;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<GardenServicesDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GardenConnectionSqlite")));
+
+  builder.Configuration
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
+
+string dbConn = builder.Configuration.GetSection("ConnectionStrings").GetSection("GardenConnectionSqlite").Value;
+
+builder.Services.AddDbContext<GardenServicesDbContext>(options => options.UseSqlServer(dbConn));
 
 var authenticationConfiguration = new AuthenticationConfiguration();
 builder.Configuration.GetSection(nameof(AuthenticationConfiguration)).Bind("AuthenticationConfiguration", authenticationConfiguration);

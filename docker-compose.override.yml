@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  GardenService:    
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development 
+
+  Telemetry:    
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "@Pqkrtsbm1"
