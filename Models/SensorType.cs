@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GardenService.Models
 {
-    [Table("SensorType", Schema="Common")]
+    [Table("SensorType", Schema = "Common")]
     [Index(nameof(SensorType.Name), IsUnique = true)]
     [Index(nameof(SensorType.DataType), IsUnique = true)]
     public class SensorType
@@ -18,17 +18,17 @@ namespace GardenService.Models
         [StringLength(80)]
         public string Name { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]        
+        [Column(TypeName = "NVARCHAR")]
         [StringLength(280)]
-        public string? Description { get; set;}
+        public string? Description { get; set; }
 
         [Column(TypeName = "NVARCHAR")]
         [Required]
         [StringLength(20)]
-        public string DataType { get; set;}
+        public string DataType { get; set; }
 
         public DateTime? EnteredDate { get; set; }
 
-        public ICollection<Sensor> Sensors { get; set; }
+        public ICollection<Sensor>? Sensors { get; set; }
     }
 }

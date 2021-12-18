@@ -19,13 +19,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-  builder.Configuration
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
+//builder.Configuration
+// .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+// .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true, true);
 
-string dbConn = builder.Configuration.GetSection("ConnectionStrings").GetSection("GardenConnectionSqlite").Value;
+//string dbConn = builder.Configuration.GetSection("ConnectionStrings").GetSection("GardenConnectionSqlite").Value;
 
-builder.Services.AddDbContext<GardenServicesDbContext>(options => options.UseSqlServer(dbConn));
+builder.Services.AddDbContext<GardenServicesDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GardenConnectionSqlite")));
 
 var authenticationConfiguration = new AuthenticationConfiguration();
 builder.Configuration.GetSection(nameof(AuthenticationConfiguration)).Bind("AuthenticationConfiguration", authenticationConfiguration);
@@ -39,7 +39,8 @@ builder.Host.UseNLog();
 
 builder.Services.AddSingleton<ICustomAuthenticationManager, CustomAuthenticationManager>();
 
-builder.Services.AddMvc().AddJsonOptions(x => {     
+builder.Services.AddMvc().AddJsonOptions(x =>
+{
     x.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
 

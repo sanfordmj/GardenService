@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GardenService.Models
 {
-    [Table("SensorReading", Schema="Organization")]
+    [Table("SensorReading", Schema = "Organization")]
     public class SensorReading
     {
         public int IX_SensorReading { get; set; }
@@ -17,9 +17,9 @@ namespace GardenService.Models
         public DateTime? EnteredDate { get; set; }
 
         [ForeignKey("IX_Sensor")]
-        public Sensor Sensor { get; set;}
+        public Sensor? Sensor { get; set; }
         public int IX_Sensor { get; set; }
-        
-        public ICollection<Sensor> Sensors { get; set; }
+
+        public ICollection<Sensor>? Sensors { get; set; }
     }
 }
