@@ -6,7 +6,7 @@ namespace GardenService.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]   
+    [Route("[controller]")]
     public class SensorReadingController : ControllerBase
     {
 
@@ -55,7 +55,7 @@ namespace GardenService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IsOrderExists(id))
+                if (!IsSensorReadingExists(id))
                 {
                     return NotFound();
                 }
@@ -91,7 +91,7 @@ namespace GardenService.Controllers
             return Ok(reading);
         }
 
-        private bool IsOrderExists(int id)
+        private bool IsSensorReadingExists(int id)
         {
             return _gardenDbContext!.SensorReadings.Any(e => e.IX_SensorReading == id);
         }

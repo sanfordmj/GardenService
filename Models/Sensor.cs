@@ -7,25 +7,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GardenService.Models
 {
     [Table("Sensor", Schema = "Organization")]
-    [Index(nameof(Sensor.Name), nameof(Sensor.IX_User), IsUnique = true)]
     public class Sensor
     {
         public int IX_Sensor { get; set; }
 
-        [Column(TypeName = "NVARCHAR")]
-        [Required]
-        [StringLength(80)]
-        public string Name { get; set; }
-
         public DateTime? EnteredDate { get; set; }
-
-        [ForeignKey("IX_User")]
-        public User? User { get; set; }
-        public int IX_User { get; set; }
 
         [ForeignKey("IX_SensorType")]
         public SensorType? SensorType { get; set; }
         public int IX_SensorType { get; set; }
+
+        [ForeignKey("IX_Node")]
+        public Node? Node { get; set; }
+        public int IX_Node { get; set; }
+
+        public ICollection<SensorReading>? SensorReadings { get; set; }
 
     }
 }

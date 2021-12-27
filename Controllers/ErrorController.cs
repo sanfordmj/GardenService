@@ -6,7 +6,7 @@ namespace GardenService.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]   
+    [Route("[controller]")]
     public class ErrorController : ControllerBase
     {
 
@@ -55,7 +55,7 @@ namespace GardenService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IsOrderExists(id))
+                if (!IsErrorExists(id))
                 {
                     return NotFound();
                 }
@@ -68,7 +68,7 @@ namespace GardenService.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Error>> PostSensorReading(Error model)
+        public async Task<ActionResult<Error>> PostError(Error model)
         {
             _gardenDbContext!.Errors.Add(model);
             await _gardenDbContext!.SaveChangesAsync();
@@ -77,7 +77,7 @@ namespace GardenService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Error>> DeleteSensorReading(int id)
+        public async Task<ActionResult<Error>> DeleteError(int id)
         {
             var model = await _gardenDbContext!.Errors.FindAsync(id);
             if (model == null)
@@ -91,7 +91,7 @@ namespace GardenService.Controllers
             return Ok(model);
         }
 
-        private bool IsOrderExists(int id)
+        private bool IsErrorExists(int id)
         {
             return _gardenDbContext!.Errors.Any(e => e.IX_Error == id);
         }

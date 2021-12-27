@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GardenService.Controllers
 {
-
     [ApiController]
-    [Route("[controller]")]   
+    [Route("[controller]")]
     public class TraceController : ControllerBase
     {
 
@@ -55,7 +54,7 @@ namespace GardenService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IsOrderExists(id))
+                if (!IsTraceExists(id))
                 {
                     return NotFound();
                 }
@@ -68,7 +67,7 @@ namespace GardenService.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Trace>> PostSensorReading(Trace model)
+        public async Task<ActionResult<Trace>> PostTrace(Trace model)
         {
             _gardenDbContext!.Traces.Add(model);
             await _gardenDbContext!.SaveChangesAsync();
@@ -77,7 +76,7 @@ namespace GardenService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Trace>> DeleteSensorReading(int id)
+        public async Task<ActionResult<Trace>> DeleteTrace(int id)
         {
             var model = await _gardenDbContext!.Traces.FindAsync(id);
             if (model == null)
@@ -91,7 +90,7 @@ namespace GardenService.Controllers
             return Ok(model);
         }
 
-        private bool IsOrderExists(int id)
+        private bool IsTraceExists(int id)
         {
             return _gardenDbContext!.Traces.Any(e => e.IX_Trace == id);
         }

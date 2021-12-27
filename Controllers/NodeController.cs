@@ -6,27 +6,27 @@ namespace GardenService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class NodeController : ControllerBase
     {
         private readonly GardenServicesDbContext? _gardenDbContext;
-        private readonly ILogger<UserController>? _logger;
+        private readonly ILogger<NodeController>? _logger;
 
-        public UserController(ILogger<UserController> logger, GardenServicesDbContext gardenServicesDbContext)
+        public NodeController(ILogger<NodeController> logger, GardenServicesDbContext gardenServicesDbContext)
         {
             this._logger = logger;
             this._gardenDbContext = gardenServicesDbContext;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<Node>>> GetUsers()
         {
-            return Ok(await _gardenDbContext!.Users.ToListAsync());
+            return Ok(await _gardenDbContext!.Nodes.ToListAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<Node>> GetNode(int id)
         {
-            var reading = await _gardenDbContext!.Users.FindAsync(id);
+            var reading = await _gardenDbContext!.Nodes.FindAsync(id);
 
             if (reading == null)
             {
@@ -38,9 +38,9 @@ namespace GardenService.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User model)
+        public async Task<IActionResult> PutNode(int id, Node model)
         {
-            if (id != model.IX_User)
+            if (id != model.IX_Node)
             {
                 return BadRequest();
             }
@@ -53,7 +53,7 @@ namespace GardenService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IsUserExists(id))
+                if (!IsNodeExists(id))
                 {
                     return NotFound();
                 }
@@ -66,32 +66,32 @@ namespace GardenService.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User model)
+        public async Task<ActionResult<Node>> PostNode(Node model)
         {
-            _gardenDbContext!.Users.Add(model);
+            _gardenDbContext!.Nodes.Add(model);
             await _gardenDbContext!.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = model.IX_User }, model);
+            return CreatedAtAction("GetNode", new { id = model.IX_Node }, model);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        public async Task<ActionResult<User>> DeleteNode(int id)
         {
-            var model = await _gardenDbContext!.Users.FindAsync(id);
+            var model = await _gardenDbContext!.Nodes.FindAsync(id);
             if (model == null)
             {
                 return NotFound();
             }
 
-            _gardenDbContext!.Users.Remove(model);
+            _gardenDbContext!.Nodes.Remove(model);
             await _gardenDbContext!.SaveChangesAsync();
 
             return Ok(model);
         }
 
-        private bool IsUserExists(int id)
+        private bool IsNodeExists(int id)
         {
-            return _gardenDbContext!.Users.Any(e => e.IX_User == id);
+            return _gardenDbContext!.Nodes.Any(e => e.IX_Node == id);
         }
 
     }

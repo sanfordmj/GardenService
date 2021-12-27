@@ -6,7 +6,7 @@ namespace GardenService.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]   
+    [Route("[controller]")]
     public class SensorController : ControllerBase
     {
 
@@ -55,7 +55,7 @@ namespace GardenService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IsOrderExists(id))
+                if (!IsSensorExists(id))
                 {
                     return NotFound();
                 }
@@ -68,7 +68,7 @@ namespace GardenService.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Sensor>> PostSensorReading(Sensor model)
+        public async Task<ActionResult<Sensor>> PostSensor(Sensor model)
         {
             _gardenDbContext!.Sensors.Add(model);
             await _gardenDbContext!.SaveChangesAsync();
@@ -77,7 +77,7 @@ namespace GardenService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Sensor>> DeleteSensorReading(int id)
+        public async Task<ActionResult<Sensor>> DeleteSensor(int id)
         {
             var model = await _gardenDbContext!.Sensors.FindAsync(id);
             if (model == null)
@@ -91,7 +91,7 @@ namespace GardenService.Controllers
             return Ok(model);
         }
 
-        private bool IsOrderExists(int id)
+        private bool IsSensorExists(int id)
         {
             return _gardenDbContext!.Sensors.Any(e => e.IX_Sensor == id);
         }

@@ -4,29 +4,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GardenService.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserStatusController : ControllerBase
     {
-        private readonly GardenServicesDbContext? _gardenDbContext;
-        private readonly ILogger<UserController>? _logger;
 
-        public UserController(ILogger<UserController> logger, GardenServicesDbContext gardenServicesDbContext)
+        private readonly GardenServicesDbContext? _gardenDbContext;
+        private readonly ILogger<UserStatusController>? _logger;
+
+        public UserStatusController(ILogger<UserStatusController> logger, GardenServicesDbContext gardenServicesDbContext)
         {
             this._logger = logger;
             this._gardenDbContext = gardenServicesDbContext;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserStatus>>> GetUserStatus()
         {
-            return Ok(await _gardenDbContext!.Users.ToListAsync());
+            return Ok(await _gardenDbContext!.UserStatus.ToListAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserStatus>> GetUserStatus(int id)
         {
-            var reading = await _gardenDbContext!.Users.FindAsync(id);
+            var reading = await _gardenDbContext!.UserStatus.FindAsync(id);
 
             if (reading == null)
             {
@@ -38,9 +40,9 @@ namespace GardenService.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User model)
+        public async Task<IActionResult> PutUserStatus(int id, UserStatus model)
         {
-            if (id != model.IX_User)
+            if (id != model.IX_UserStatus)
             {
                 return BadRequest();
             }
@@ -53,7 +55,7 @@ namespace GardenService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IsUserExists(id))
+                if (!IsUserStatusExists(id))
                 {
                     return NotFound();
                 }
@@ -66,32 +68,32 @@ namespace GardenService.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User model)
+        public async Task<ActionResult<SensorType>> PostUserStatus(UserStatus model)
         {
-            _gardenDbContext!.Users.Add(model);
+            _gardenDbContext!.UserStatus.Add(model);
             await _gardenDbContext!.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = model.IX_User }, model);
+            return CreatedAtAction("GetUserStatus", new { id = model.IX_UserStatus }, model);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        public async Task<ActionResult<UserStatus>> DeleteUserStatus(int id)
         {
-            var model = await _gardenDbContext!.Users.FindAsync(id);
+            var model = await _gardenDbContext!.UserStatus.FindAsync(id);
             if (model == null)
             {
                 return NotFound();
             }
 
-            _gardenDbContext!.Users.Remove(model);
+            _gardenDbContext!.UserStatus.Remove(model);
             await _gardenDbContext!.SaveChangesAsync();
 
             return Ok(model);
         }
 
-        private bool IsUserExists(int id)
+        private bool IsUserStatusExists(int id)
         {
-            return _gardenDbContext!.Users.Any(e => e.IX_User == id);
+            return _gardenDbContext!.UserStatus.Any(e => e.IX_UserStatus == id);
         }
 
     }

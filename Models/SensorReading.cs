@@ -20,6 +20,5 @@ namespace GardenService.Models
         public Sensor? Sensor { get; set; }
         public int IX_Sensor { get; set; }
 
-        public ICollection<Sensor>? Sensors { get; set; }
     }
 }
